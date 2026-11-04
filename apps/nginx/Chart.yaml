@@ -1,0 +1,8 @@
+apiVersion: v2
+name: nginx
+description: Local Nginx application
+type: application
+version: 0.1.0
+appVersion: "1.27.0"
+icon: https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png
+
