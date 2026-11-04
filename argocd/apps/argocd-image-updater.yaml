@@ -1,0 +1,41 @@
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-image-updater
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://argoproj.github.io/argo-helm
+    chart: argocd-image-updater
+    targetRevision: 1.3.2
+    helm:
+      values: |
+        crds:
+          install: true
+          keep: true
+
+        replicaCount: 1
+
+        # Restrict controller RBAC to the Argo CD namespace
+        createClusterRoles: false
+
+        rbac:
+          enabled: true
+
+        config:
+          log.level: debug
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
