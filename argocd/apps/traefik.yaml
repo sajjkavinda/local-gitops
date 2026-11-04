@@ -1,8 +1,10 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
+
 metadata:
   name: traefik
   namespace: argocd
+
 spec:
   project: default
 
@@ -10,10 +12,11 @@ spec:
     repoURL: https://traefik.github.io/charts
     chart: traefik
     targetRevision: 42.3.0
+
     helm:
       values: |
         service:
-	  spec
+          spec:
             type: ClusterIP
 
         ports:
@@ -28,6 +31,9 @@ spec:
         providers:
           kubernetesIngress:
             enabled: true
+            publishedService:
+              enabled: false
+            reportNodeInternalIPs: true
 
   destination:
     server: https://kubernetes.default.svc
@@ -37,5 +43,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
+
     syncOptions:
       - CreateNamespace=true
